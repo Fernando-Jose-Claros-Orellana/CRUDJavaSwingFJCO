@@ -15,6 +15,7 @@ public class FrmPaises extends javax.swing.JFrame {
      */
     public FrmPaises() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -36,9 +37,21 @@ public class FrmPaises extends javax.swing.JFrame {
         txtNombre = new javax.swing.JTextField();
         txtContinente = new javax.swing.JTextField();
 
+        setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
+
         btnGuardar.setText("Guardar");
 
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         txtDescripcion.setColumns(20);
         txtDescripcion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -109,6 +122,17 @@ public class FrmPaises extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        FrmVerPaises pais = new FrmVerPaises();
+        pais.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        FrmVerPaises pais = new FrmVerPaises();
+        pais.setVisible(true);
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
