@@ -11,6 +11,7 @@ package com.mycompany.crudjavaswingfjco;
 public class CRUDJavaSwingFJCO {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        FrmInicio inicio = new FrmInicio();
+        inicio.setVisible(true);
     }
 }
