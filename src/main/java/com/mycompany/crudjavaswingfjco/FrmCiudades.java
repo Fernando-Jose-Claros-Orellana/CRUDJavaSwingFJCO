@@ -4,16 +4,21 @@
  */
 package com.mycompany.crudjavaswingfjco;
 
+import utilerias.OpcionesCRUD;
+
 /**
  *
  * @author FJ
  */
 public class FrmCiudades extends javax.swing.JFrame {
 
+    private OpcionesCRUD opcionCRUD;
+
     /**
      * Creates new form FrmCiudades
      */
-    public FrmCiudades() {
+    public FrmCiudades(OpcionesCRUD opcion) {
+        this.opcionCRUD = opcion;
         initComponents();
         this.setLocationRelativeTo(null);
     }
@@ -65,6 +70,11 @@ public class FrmCiudades extends javax.swing.JFrame {
         comboPais.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -139,54 +149,44 @@ public class FrmCiudades extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-         FrmInicio inicio = new FrmInicio();
+        FrmInicio inicio = new FrmInicio();
         inicio.setVisible(true);
-         this.setVisible(false);
+        this.setVisible(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-         FrmInicio inicio = new FrmInicio();
+        FrmInicio inicio = new FrmInicio();
         inicio.setVisible(true);
     }//GEN-LAST:event_formWindowClosing
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+         FrmInicio inicio = new FrmInicio();
+        if (null != opcionCRUD)
+            switch (opcionCRUD) {
+                case CREAR:
+        inicio.setVisible(true);
+        this.setVisible(false);
+                    break;
+                case MODIFICAR:
+        inicio.setVisible(true);
+        this.setVisible(false);
+                    break;
+                case ELIMINAR:
+        inicio.setVisible(true);
+        this.setVisible(false);
+                    break;
+                default:
+                    break;
+            }
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmCiudades.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmCiudades.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmCiudades.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmCiudades.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmCiudades().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnGuardar;
+    public javax.swing.JButton btnGuardar;
     private javax.swing.JComboBox<String> comboPais;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

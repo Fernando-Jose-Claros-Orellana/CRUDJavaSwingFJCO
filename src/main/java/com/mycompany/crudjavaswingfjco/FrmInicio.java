@@ -4,12 +4,14 @@
  */
 package com.mycompany.crudjavaswingfjco;
 
+import utilerias.OpcionesCRUD;
+
 /**
  *
  * @author FJ
  */
 public class FrmInicio extends javax.swing.JFrame {
-
+ private OpcionesCRUD opcionCRUD;
     /**
      * Creates new form FrmInicio
      */
@@ -73,8 +75,18 @@ public class FrmInicio extends javax.swing.JFrame {
         });
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnVerPaises.setText("Ver Paises");
         btnVerPaises.addActionListener(new java.awt.event.ActionListener() {
@@ -142,7 +154,8 @@ public class FrmInicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
-        FrmCiudades ciudad = new FrmCiudades();
+        opcionCRUD = OpcionesCRUD.CREAR;
+        FrmCiudades ciudad = new FrmCiudades(opcionCRUD);
         ciudad.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnCrearActionPerformed
@@ -156,6 +169,22 @@ public class FrmInicio extends javax.swing.JFrame {
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        opcionCRUD = OpcionesCRUD.MODIFICAR ;
+        FrmCiudades ciudad = new FrmCiudades(opcionCRUD);
+        ciudad.setVisible(true);
+        this.setVisible(false);
+        ciudad.btnGuardar.setText("Editar");
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        opcionCRUD = OpcionesCRUD.ELIMINAR ;
+        FrmCiudades ciudad = new FrmCiudades(opcionCRUD);
+        ciudad.setVisible(true);
+        this.setVisible(false);
+        ciudad.btnGuardar.setText("Eliminar");
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments

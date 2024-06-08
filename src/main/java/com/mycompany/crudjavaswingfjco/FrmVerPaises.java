@@ -4,12 +4,14 @@
  */
 package com.mycompany.crudjavaswingfjco;
 
+import utilerias.OpcionesCRUD;
+
 /**
  *
  * @author FJ
  */
 public class FrmVerPaises extends javax.swing.JFrame {
-
+ private OpcionesCRUD opcionCRUD;
     /**
      * Creates new form FrmVerPaises
      */
@@ -75,8 +77,18 @@ public class FrmVerPaises extends javax.swing.JFrame {
         });
 
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
 
         btnRegresar.setText("Regresar");
         btnRegresar.addActionListener(new java.awt.event.ActionListener() {
@@ -137,7 +149,8 @@ public class FrmVerPaises extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
-       FrmPaises pais = new FrmPaises();
+        opcionCRUD = OpcionesCRUD.CREAR;
+        FrmPaises pais = new FrmPaises(opcionCRUD);
        pais.setVisible(true);
        this.setVisible(false);
     }//GEN-LAST:event_btnCrearActionPerformed
@@ -152,6 +165,22 @@ public class FrmVerPaises extends javax.swing.JFrame {
         FrmInicio inicio = new FrmInicio();
         inicio.setVisible(true);
     }//GEN-LAST:event_formWindowClosing
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+         opcionCRUD = OpcionesCRUD.MODIFICAR; 
+        FrmPaises pais = new FrmPaises(opcionCRUD);
+       pais.setVisible(true);
+       this.setVisible(false);
+       pais.btnGuardar.setText("Editar");
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+         opcionCRUD = OpcionesCRUD.ELIMINAR; 
+        FrmPaises pais = new FrmPaises(opcionCRUD);
+       pais.setVisible(true);
+       this.setVisible(false);
+       pais.btnGuardar.setText("Eliminar");
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     /**
      * @param args the command line arguments
