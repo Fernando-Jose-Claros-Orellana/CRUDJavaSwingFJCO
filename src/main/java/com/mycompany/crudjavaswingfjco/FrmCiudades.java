@@ -5,7 +5,10 @@
 package com.mycompany.crudjavaswingfjco;
 
 import utilerias.OpcionesCRUD;
-
+import accseoadatos.*;
+import entidades.Paises;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
 /**
  *
  * @author FJ
@@ -13,13 +16,15 @@ import utilerias.OpcionesCRUD;
 public class FrmCiudades extends javax.swing.JFrame {
 
     private OpcionesCRUD opcionCRUD;
-
     /**
      * Creates new form FrmCiudades
      */
     public FrmCiudades(OpcionesCRUD opcion) {
         this.opcionCRUD = opcion;
         initComponents();
+        ArrayList<Paises> paises = PaisDAL.obtenerTodos();
+        DefaultComboBoxModel modelComboBox = new DefaultComboBoxModel(paises.toArray());
+        comboPais.setModel(modelComboBox);
         this.setLocationRelativeTo(null);
     }
 
@@ -187,7 +192,7 @@ public class FrmCiudades extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     public javax.swing.JButton btnGuardar;
-    private javax.swing.JComboBox<String> comboPais;
+    private javax.swing.JComboBox<Paises> comboPais;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
