@@ -4,6 +4,12 @@
  */
 package com.mycompany.crudjavaswingfjco;
 
+import accseoadatos.CiudadDAL;
+import entidades.Ciudades;
+import entidades.Paises;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import utilerias.OpcionesCRUD;
 
 /**
@@ -11,12 +17,15 @@ import utilerias.OpcionesCRUD;
  * @author FJ
  */
 public class FrmInicio extends javax.swing.JFrame {
- private OpcionesCRUD opcionCRUD;
+
+    private OpcionesCRUD opcionCRUD;
+
     /**
      * Creates new form FrmInicio
      */
     public FrmInicio() {
         initComponents();
+        
         this.setLocationRelativeTo(null);
     }
 
@@ -37,10 +46,18 @@ public class FrmInicio extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         btnVerPaises = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        txtBuscar = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(0, 0));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jTable1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -102,6 +119,21 @@ public class FrmInicio extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Nombre");
+
+        txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarKeyReleased(evt);
+            }
+        });
+
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -110,36 +142,46 @@ public class FrmInicio extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(90, 90, 90)
-                                .addComponent(btnCrear))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnEditar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnEliminar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 340, Short.MAX_VALUE)
-                                .addComponent(btnVerPaises))))
+                        .addComponent(btnEditar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEliminar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 356, Short.MAX_VALUE)
+                        .addComponent(btnVerPaises))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(54, 54, 54)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(31, 31, 31))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(btnSalir)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(btnSalir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBuscar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnBuscar)
+                        .addGap(34, 34, 34)
+                        .addComponent(btnCrear)))
+                .addGap(15, 15, 15))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnSalir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(35, 35, 35)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(31, 31, 31)
-                        .addComponent(btnCrear)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBuscar)
+                            .addComponent(btnCrear)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(btnSalir)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -147,7 +189,7 @@ public class FrmInicio extends javax.swing.JFrame {
                     .addComponent(btnEditar)
                     .addComponent(btnEliminar)
                     .addComponent(btnVerPaises))
-                .addContainerGap(7, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -155,7 +197,7 @@ public class FrmInicio extends javax.swing.JFrame {
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         opcionCRUD = OpcionesCRUD.CREAR;
-        FrmCiudades ciudad = new FrmCiudades(opcionCRUD);
+        FrmCiudades ciudad = new FrmCiudades(opcionCRUD , new Ciudades());
         ciudad.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnCrearActionPerformed
@@ -167,24 +209,117 @@ public class FrmInicio extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVerPaisesActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
-        this.setVisible(false);
+        this.dispose();
+        System.exit(0);
     }//GEN-LAST:event_btnSalirActionPerformed
 
+    private Ciudades obtenerDatos() {
+        Ciudades ciudad = new Ciudades();
+        int row = jTable1.getSelectedRow();
+        ciudad.setId((int) jTable1.getValueAt(row, 0));
+        ciudad.setNombre(jTable1.getValueAt(row, 1).toString());
+        ciudad.setDescripcion(jTable1.getValueAt(row, 2).toString());
+        ciudad.setPoblacion((int) jTable1.getValueAt(row, 3));
+        ciudad.setPaisID((int) jTable1.getValueAt(row, 4));
+
+        Paises pais = new Paises();
+        pais.setNombre(jTable1.getValueAt(row, 5).toString());
+        pais.setId((int) jTable1.getValueAt(row, 4));
+        ciudad.setPais(pais);
+        return ciudad;
+    }
+
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        opcionCRUD = OpcionesCRUD.MODIFICAR ;
-        FrmCiudades ciudad = new FrmCiudades(opcionCRUD);
-        ciudad.setVisible(true);
-        this.setVisible(false);
-        ciudad.btnGuardar.setText("Editar");
+        int row = jTable1.getSelectedRow();
+        if (row != -1) {
+            opcionCRUD = OpcionesCRUD.MODIFICAR;
+            FrmCiudades ciudad = new FrmCiudades(opcionCRUD ,obtenerDatos());
+            ciudad.setVisible(true);
+            this.setVisible(false);
+            ciudad.btnGuardar.setText("Editar");
+        }
+        else{
+             JOptionPane.showMessageDialog(this,
+                    "Seleccionar una fila", "Producto",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        opcionCRUD = OpcionesCRUD.ELIMINAR ;
-        FrmCiudades ciudad = new FrmCiudades(opcionCRUD);
+        int row = jTable1.getSelectedRow();
+        if (row != -1) {
+        opcionCRUD = OpcionesCRUD.ELIMINAR;
+        FrmCiudades ciudad = new FrmCiudades(opcionCRUD ,obtenerDatos());
         ciudad.setVisible(true);
         this.setVisible(false);
         ciudad.btnGuardar.setText("Eliminar");
+        }
+        else {
+             JOptionPane.showMessageDialog(this,
+                    "Seleccionar una fila", "Producto",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+        Ciudades ciudad = new Ciudades();
+        ciudad.setNombre(txtBuscar.getText());
+        ArrayList<Ciudades> ciudades = CiudadDAL.buscar(ciudad);
+        String[] columnas = {"ID", "Nombre", "Descripcion", "Poblacion", "PaisID", "Pais"};
+        Object[][] datos = new Object[ciudades.size()][6];
+        for (int i = 0; i < ciudades.size(); i++) {
+            Ciudades item = ciudades.get(i);
+            datos[i][0] = item.getId();
+            datos[i][1] = item.getNombre();
+            datos[i][2] = item.getDescripcion();
+            datos[i][3] = item.getPoblacion();
+            datos[i][4] = item.getPaisID();
+            datos[i][5] = item.getPais().getNombre();
+        }
+        DefaultTableModel modelTable = new DefaultTableModel(datos, columnas);
+        jTable1.setModel(modelTable);
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
+       Ciudades ciudad = new Ciudades();
+        ciudad.setNombre(txtBuscar.getText());
+        ArrayList<Ciudades> ciudades = CiudadDAL.buscar(ciudad);
+        String[] columnas = {"ID", "Nombre", "Descripcion", "Poblacion", "PaisID", "Pais"};
+        Object[][] datos = new Object[ciudades.size()][6];
+        for (int i = 0; i < ciudades.size(); i++) {
+            Ciudades item = ciudades.get(i);
+            datos[i][0] = item.getId();
+            datos[i][1] = item.getNombre();
+            datos[i][2] = item.getDescripcion();
+            datos[i][3] = item.getPoblacion();
+            datos[i][4] = item.getPaisID();
+            datos[i][5] = item.getPais().getNombre();
+        }
+        DefaultTableModel modelTable = new DefaultTableModel(datos, columnas);
+        jTable1.setModel(modelTable);
+    }//GEN-LAST:event_txtBuscarKeyReleased
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        Ciudades ciudad = new Ciudades();
+        ciudad.setNombre(txtBuscar.getText());
+        ArrayList<Ciudades> ciudades = CiudadDAL.buscar(ciudad);
+        String[] columnas = {"ID", "Nombre", "Descripcion", "Poblacion", "PaisID", "Pais"};
+        Object[][] datos = new Object[ciudades.size()][6];
+        for (int i = 0; i < ciudades.size(); i++) {
+            Ciudades item = ciudades.get(i);
+            datos[i][0] = item.getId();
+            datos[i][1] = item.getNombre();
+            datos[i][2] = item.getDescripcion();
+            datos[i][3] = item.getPoblacion();
+            datos[i][4] = item.getPaisID();
+            datos[i][5] = item.getPais().getNombre();
+        }
+        DefaultTableModel modelTable = new DefaultTableModel(datos, columnas);
+        jTable1.setModel(modelTable);
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -222,13 +357,16 @@ public class FrmInicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCrear;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnSalir;
     private javax.swing.JButton btnVerPaises;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

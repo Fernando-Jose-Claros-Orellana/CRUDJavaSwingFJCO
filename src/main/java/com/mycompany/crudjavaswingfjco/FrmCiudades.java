@@ -6,9 +6,12 @@ package com.mycompany.crudjavaswingfjco;
 
 import utilerias.OpcionesCRUD;
 import accseoadatos.*;
+import entidades.Ciudades;
 import entidades.Paises;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 /**
  *
  * @author FJ
@@ -16,15 +19,26 @@ import javax.swing.DefaultComboBoxModel;
 public class FrmCiudades extends javax.swing.JFrame {
 
     private OpcionesCRUD opcionCRUD;
+    private Ciudades ciudadActual = new Ciudades();
+    private HashMap<Integer, Paises> mapPaises = new HashMap<Integer,Paises>();
+
     /**
      * Creates new form FrmCiudades
      */
-    public FrmCiudades(OpcionesCRUD opcion) {
+    public FrmCiudades(OpcionesCRUD opcion ,Ciudades ciudad) {
         this.opcionCRUD = opcion;
         initComponents();
         ArrayList<Paises> paises = PaisDAL.obtenerTodos();
-        DefaultComboBoxModel modelComboBox = new DefaultComboBoxModel(paises.toArray());
+        DefaultComboBoxModel<Paises> modelComboBox = new     DefaultComboBoxModel(paises.toArray());
+        for (Paises pai : paises) {
+            mapPaises.put(pai.getId(), pai);
+        }
         comboPais.setModel(modelComboBox);
+        if (opcion != OpcionesCRUD.CREAR) {
+            asingarDatos(ciudad);
+            ciudadActual = ciudad;
+        }
+
         this.setLocationRelativeTo(null);
     }
 
@@ -159,6 +173,89 @@ public class FrmCiudades extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private Ciudades obtenerDatos() {
+        Ciudades ciudad = new Ciudades();
+        ciudad.setNombre(txtNombre.getText());
+        ciudad.setDescripcion(txtDescipcion.getText());
+        ciudad.setPoblacion(Integer.parseInt(txtPoblacion.getText()));
+        Paises pais = (Paises) comboPais.getSelectedItem();
+        ciudad.setPaisID(pais.getId());
+        ciudad.setId(ciudadActual.getId());
+        return ciudad;
+    }
+    
+    private void asingarDatos(Ciudades ciudad) {
+        txtNombre.setText(ciudad.getNombre());
+        txtDescipcion.setText(ciudad.getDescripcion());
+        txtPoblacion.setText(Integer.toString(ciudad.getPoblacion()));
+        // Categoria categoria = producto.getCategoria(); 
+        Paises pais = mapPaises.get(ciudad.getPaisID());
+        comboPais.setSelectedItem(pais);
+    }
+    
+    private void crearReg() {
+        try {
+            Ciudades ciudad = obtenerDatos();
+            int result = CiudadDAL.crear(ciudad);
+            if (result > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "El fue registrado existosamente", "CREAR CIUDAD",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Sucedio un error al crear ", "ERROR CIUDAD",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(), "ERROR CIUDAD",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+    
+    private void modificarReg() {
+        try {
+            Ciudades ciudad = obtenerDatos();
+            int result = CiudadDAL.modificar(ciudad);
+            if (result > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "El fue modificado existosamente", "MODIFICAR CIUDAD",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Sucedio un error al modificar", "ERROR CIUDAD",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(), "ERROR CIUDAD",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+    
+    private void eliminarReg() {
+        try {
+            Ciudades ciudad = obtenerDatos();
+            int result = CiudadDAL.eliminar(ciudad);
+            if (result > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Elfue eliminado existosamente", "ELIMINAR CIUDAD",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Sucedio un error al eliminar", "ERROR CIUDAD",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(), "ERROR CIUDAD",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+    
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         FrmInicio inicio = new FrmInicio();
         inicio.setVisible(true);
@@ -169,14 +266,17 @@ public class FrmCiudades extends javax.swing.JFrame {
         if (null != opcionCRUD)
             switch (opcionCRUD) {
                 case CREAR:
+                    crearReg();
         inicio.setVisible(true);
         this.setVisible(false);
                     break;
                 case MODIFICAR:
+                    modificarReg();
         inicio.setVisible(true);
         this.setVisible(false);
                     break;
                 case ELIMINAR:
+                    eliminarReg();
         inicio.setVisible(true);
         this.setVisible(false);
                     break;
