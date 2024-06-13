@@ -240,7 +240,7 @@ public class FrmInicio extends javax.swing.JFrame {
         }
         else{
              JOptionPane.showMessageDialog(this,
-                    "Seleccionar una fila", "Producto",
+                    "Seleccionar una fila", "Ciudad",
                     JOptionPane.WARNING_MESSAGE);
         }
 
@@ -257,7 +257,7 @@ public class FrmInicio extends javax.swing.JFrame {
         }
         else {
              JOptionPane.showMessageDialog(this,
-                    "Seleccionar una fila", "Producto",
+                    "Seleccionar una fila", "Ciudad",
                     JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnEliminarActionPerformed

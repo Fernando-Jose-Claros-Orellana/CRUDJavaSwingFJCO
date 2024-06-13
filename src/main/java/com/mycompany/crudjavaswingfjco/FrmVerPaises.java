@@ -4,6 +4,13 @@
  */
 package com.mycompany.crudjavaswingfjco;
 
+import accseoadatos.CiudadDAL;
+import accseoadatos.PaisDAL;
+import entidades.Ciudades;
+import entidades.Paises;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import utilerias.OpcionesCRUD;
 
 /**
@@ -36,17 +43,17 @@ public class FrmVerPaises extends javax.swing.JFrame {
         btnEditar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         txtBuscar = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        txtBuscar1 = new javax.swing.JTextField();
-        btnBuscar1 = new javax.swing.JButton();
 
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
 
@@ -103,13 +110,20 @@ public class FrmVerPaises extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Nombre");
-
-        btnBuscar.setText("Buscar");
-
         jLabel4.setText("Nombre");
 
-        btnBuscar1.setText("Buscar");
+        txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarKeyReleased(evt);
+            }
+        });
+
+        btnBuscar.setText("Buscar");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -119,9 +133,9 @@ public class FrmVerPaises extends javax.swing.JFrame {
                 .addGap(198, 198, 198)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnBuscar1)
+                .addComponent(btnBuscar)
                 .addGap(59, 59, 59)
                 .addComponent(btnCrear)
                 .addGap(14, 14, 14))
@@ -142,15 +156,6 @@ public class FrmVerPaises extends javax.swing.JFrame {
                             .addGap(18, 18, 18)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addContainerGap(43, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(171, 171, 171)
-                    .addComponent(jLabel3)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(txtBuscar)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                    .addComponent(btnBuscar)
-                    .addGap(172, 172, 172)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,8 +164,8 @@ public class FrmVerPaises extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel4)
-                        .addComponent(txtBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnBuscar1))
+                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnBuscar))
                     .addComponent(btnCrear))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 234, Short.MAX_VALUE)
                 .addComponent(btnRegresar)
@@ -176,14 +181,6 @@ public class FrmVerPaises extends javax.swing.JFrame {
                         .addComponent(btnEditar)
                         .addComponent(btnEliminar))
                     .addContainerGap(18, Short.MAX_VALUE)))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(149, 149, 149)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3)
-                        .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnBuscar))
-                    .addContainerGap(149, Short.MAX_VALUE)))
         );
 
         pack();
@@ -191,7 +188,7 @@ public class FrmVerPaises extends javax.swing.JFrame {
 
     private void btnCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearActionPerformed
         opcionCRUD = OpcionesCRUD.CREAR;
-        FrmPaises pais = new FrmPaises(opcionCRUD);
+        FrmPaises pais = new FrmPaises(opcionCRUD, new Paises());
        pais.setVisible(true);
        this.setVisible(false);
     }//GEN-LAST:event_btnCrearActionPerformed
@@ -207,21 +204,107 @@ public class FrmVerPaises extends javax.swing.JFrame {
         inicio.setVisible(true);
     }//GEN-LAST:event_formWindowClosing
 
+    private Paises obtenerDatos() {
+        Paises pais = new Paises();
+        int row = jTable1.getSelectedRow();
+        pais.setId((int) jTable1.getValueAt(row, 0));
+        pais.setNombre(jTable1.getValueAt(row, 1).toString());
+        pais.setDescripcion(jTable1.getValueAt(row, 2).toString());
+        pais.setContinente(jTable1.getValueAt(row, 3).toString());
+        //ciudad.setPaisID((int) jTable1.getValueAt(row, 4));
+
+        //Paises pais = new Paises();
+        //pais.setNombre(jTable1.getValueAt(row, 5).toString());
+        //pais.setId((int) jTable1.getValueAt(row, 4));
+        //ciudad.setPais(pais);
+        return pais;
+    }
+    
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-         opcionCRUD = OpcionesCRUD.MODIFICAR; 
-        FrmPaises pais = new FrmPaises(opcionCRUD);
+int row = jTable1.getSelectedRow();
+        if (row != -1) {
+        opcionCRUD = OpcionesCRUD.MODIFICAR; 
+        FrmPaises pais = new FrmPaises(opcionCRUD, obtenerDatos());
        pais.setVisible(true);
        this.setVisible(false);
        pais.btnGuardar.setText("Editar");
+        }
+        else {
+             JOptionPane.showMessageDialog(this,
+                    "Seleccionar una fila", "Pais",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-         opcionCRUD = OpcionesCRUD.ELIMINAR; 
-        FrmPaises pais = new FrmPaises(opcionCRUD);
+        int row = jTable1.getSelectedRow();
+        if (row != -1) { 
+        opcionCRUD = OpcionesCRUD.ELIMINAR; 
+        FrmPaises pais = new FrmPaises(opcionCRUD, obtenerDatos());
        pais.setVisible(true);
        this.setVisible(false);
        pais.btnGuardar.setText("Eliminar");
+        }
+        else {
+             JOptionPane.showMessageDialog(this,
+                    "Seleccionar una fila", "Pais",
+                    JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+         Paises pais = new Paises();
+        pais.setNombre(txtBuscar.getText());
+        ArrayList<Paises> paises = PaisDAL.buscar(pais);
+        String[] columnas = {"ID", "Nombre", "Descripcion", "Continente"};
+        Object[][] datos = new Object[paises.size()][4];
+        for (int i = 0; i < paises.size(); i++) {
+            Paises item = paises.get(i);
+            datos[i][0] = item.getId();
+            datos[i][1] = item.getNombre();
+            datos[i][2] = item.getDescripcion();
+            datos[i][3] = item.getContinente();
+        }
+        DefaultTableModel modelTable = new DefaultTableModel(datos, columnas);
+        jTable1.setModel(modelTable);
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+         Paises pais = new Paises();
+        pais.setNombre(txtBuscar.getText());
+        ArrayList<Paises> paises = PaisDAL.buscar(pais);
+        String[] columnas = {"ID", "Nombre", "Descripcion", "Continente"};
+        Object[][] datos = new Object[paises.size()][4];
+        for (int i = 0; i < paises.size(); i++) {
+            Paises item = paises.get(i);
+            datos[i][0] = item.getId();
+            datos[i][1] = item.getNombre();
+            datos[i][2] = item.getDescripcion();
+            datos[i][3] = item.getContinente();
+        }
+        DefaultTableModel modelTable = new DefaultTableModel(datos, columnas);
+        jTable1.setModel(modelTable);
+    }//GEN-LAST:event_formWindowOpened
+
+    private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
+        // TODO add your handling code here:
+         Paises pais = new Paises();
+        pais.setNombre(txtBuscar.getText());
+        ArrayList<Paises> paises = PaisDAL.buscar(pais);
+        String[] columnas = {"ID", "Nombre", "Descripcion", "Continente"};
+        Object[][] datos = new Object[paises.size()][4];
+        for (int i = 0; i < paises.size(); i++) {
+            Paises item = paises.get(i);
+            datos[i][0] = item.getId();
+            datos[i][1] = item.getNombre();
+            datos[i][2] = item.getDescripcion();
+            datos[i][3] = item.getContinente();
+        }
+        DefaultTableModel modelTable = new DefaultTableModel(datos, columnas);
+        jTable1.setModel(modelTable);
+    }//GEN-LAST:event_txtBuscarKeyReleased
 
     /**
      * @param args the command line arguments
@@ -260,17 +343,14 @@ public class FrmVerPaises extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnBuscar1;
     private javax.swing.JButton btnCrear;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField txtBuscar;
-    private javax.swing.JTextField txtBuscar1;
     // End of variables declaration//GEN-END:variables
 }

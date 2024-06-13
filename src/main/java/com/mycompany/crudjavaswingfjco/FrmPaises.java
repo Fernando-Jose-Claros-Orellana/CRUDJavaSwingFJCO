@@ -4,6 +4,13 @@
  */
 package com.mycompany.crudjavaswingfjco;
 
+import accseoadatos.CiudadDAL;
+import accseoadatos.PaisDAL;
+import entidades.Ciudades;
+import entidades.Paises;
+import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import utilerias.OpcionesCRUD;
 
 /**
@@ -12,12 +19,24 @@ import utilerias.OpcionesCRUD;
  */
 public class FrmPaises extends javax.swing.JFrame {
  private OpcionesCRUD opcionCRUD;
+ private Paises paisActual = new Paises();
     /**
      * Creates new form FrmPaises
      */
-    public FrmPaises(OpcionesCRUD opcion) {
+    public FrmPaises(OpcionesCRUD opcion, Paises pais) {
         this.opcionCRUD = opcion;
         initComponents();
+        //ArrayList<Paises> paises = PaisDAL.obtenerTodos();
+       // DefaultComboBoxModel<Paises> modelComboBox = new     DefaultComboBoxModel(paises.toArray());
+       // for (Paises pai : paises) {
+        //    mapPaises.put(pai.getId(), pai);
+       // }
+       // comboPais.setModel(modelComboBox);
+        if (opcion != OpcionesCRUD.CREAR) {
+            asingarDatos(pais);
+            paisActual = pais; 
+        }
+        
         this.setLocationRelativeTo(null);
     }
 
@@ -137,6 +156,90 @@ public class FrmPaises extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private Paises obtenerDatos() {
+        Paises pais = new Paises();
+        pais.setNombre(txtNombre.getText());
+        pais.setDescripcion(txtDescripcion.getText());
+        pais.setContinente(txtContinente.getText());
+        //Paises pais = (Paises) comboPais.getSelectedItem();
+        //ciudad.setPaisID(pais.getId());
+        pais.setId(paisActual.getId());
+        return pais;
+    }
+    
+    private void asingarDatos(Paises pais) {
+        txtNombre.setText(pais.getNombre());
+        txtDescripcion.setText(pais.getDescripcion());
+        txtContinente.setText(pais.getContinente());
+        // Categoria categoria = producto.getCategoria(); 
+        //Paises pais = mapPaises.get(ciudad.getPaisID());
+        //comboPais.setSelectedItem(pais);
+    }
+    
+    private void crearReg() {
+        try {
+            Paises pais = obtenerDatos();
+            int result = PaisDAL.crear(pais);
+            if (result > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "El fue registrado existosamente", "CREAR PAIS",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Sucedio un error al crear ", "ERROR PAIS",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(), "ERROR PAIS",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+    
+    private void modificarReg() {
+        try {
+             Paises pais = obtenerDatos();
+            int result = PaisDAL.modificar(pais);
+            if (result > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "El fue modificado existosamente", "MODIFICAR PAIS",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Sucedio un error al modificar", "ERROR PAIS",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(), "ERROR PAIS",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+    
+    private void eliminarReg() {
+        try {
+             Paises pais = obtenerDatos();
+            int result = PaisDAL.eliminar(pais);
+            if (result > 0) {
+                JOptionPane.showMessageDialog(this,
+                        "Elfue eliminado existosamente", "ELIMINAR PAIS",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "Sucedio un error al eliminar", "ERROR PAIS",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this,
+                    ex.getMessage(), "ERROR PAIS",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+    
+    
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         FrmVerPaises pais = new FrmVerPaises();
         pais.setVisible(true);
@@ -147,14 +250,17 @@ public class FrmPaises extends javax.swing.JFrame {
         if (null != opcionCRUD)
             switch (opcionCRUD) {
                 case CREAR:
+                    crearReg();
         pais.setVisible(true);
         this.setVisible(false);
                     break;
                 case MODIFICAR:
+                    modificarReg();
         pais.setVisible(true);
         this.setVisible(false);
                     break;
                 case ELIMINAR:
+                    eliminarReg();
         pais.setVisible(true);
         this.setVisible(false);
                     break;
